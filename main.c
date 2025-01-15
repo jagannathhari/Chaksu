@@ -183,6 +183,22 @@ int main(int argc, char **argv)
 
     while (!WindowShouldClose())
     {
+        if (IsFileDropped())
+        {
+            FilePathList droped_files = LoadDroppedFiles();
+            char **temp  = parser_argument((const char**)droped_files.paths,droped_files.count); 
+            int temp_len = vector_length(temp); 
+            for(int i = 0 ; i < temp_len; i++)
+            {
+                vector_append(images,temp[i]);
+            }
+
+            total_images = vector_length(images); 
+
+            free_vector(temp); 
+            UnloadDroppedFiles(droped_files); 
+        }
+
         if (IsKeyReleased(KEY_N) && current_image + 1 < total_images)
         {
             UnloadTexture(texture);
