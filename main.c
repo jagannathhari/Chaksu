@@ -39,6 +39,14 @@ Vector2 update_pos(Texture2D texture, float *scale)
 {
     const int screen_width   = GetScreenWidth();
     const int screen_height  = GetScreenHeight() - OFFSET;
+
+    if(texture.width <= screen_width && texture.height <= screen_height)
+    {
+        *scale = 1;
+        return (Vector2){(screen_width - texture.width) / 2.0, (screen_height - texture.height) / 2.0};
+
+    }
+
     const float aspect_ratio = (float)texture.width / texture.height;
 
     int new_width  = screen_width;
@@ -52,9 +60,7 @@ Vector2 update_pos(Texture2D texture, float *scale)
 
     *scale = (float)new_width / texture.width;
 
-    Vector2 pos = {(screen_width - new_width) / 2.0, (screen_height - new_height) / 2.0};
-
-    return pos;
+    return (Vector2){(screen_width - new_width) / 2.0, (screen_height - new_height) / 2.0};
 }
 
 bool is_image(const char *path)
