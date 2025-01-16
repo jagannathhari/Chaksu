@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=chaksu Image Viewer
+Exec=chaksu %F
+Type=Application
+Icon=io.github.jagannathhari.chaksu.
+MimeType=image/jpeg;image/png;image/bmp;image/gif;image/tiff;
+Categories=Graphics;Viewer;
+Actions=open-folder;
+
+[Desktop Action open-folder]
+Name=Open Folder
+Icon=io.github.jagannathhari.chaksu
+Exec=chaksu %F
