@@ -11,6 +11,11 @@ Chaksu is a minimal, cross-platform image viewer designed to be fast, lightweigh
 - **Minimal**: Simple and clean user interface.
 - **Dependency-Free**: No external dependencies, just the binary.
 
+# Download
+
+Download from [release](https://github.com/jagannathhari/Chaksu/releases) page.
+
+
 # Build
 
 On Linux:
