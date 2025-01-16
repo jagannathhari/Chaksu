@@ -13,7 +13,7 @@
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 700
 #define WINDOW_TITLE "Chaksu Image Viewer"
-#define BACKGROUND_COLOR (Color){18, 18, 18, 255}
+#define BACKGROUND_COLOR (Color){0x28,0x28,0x28, 255}
 #define OFFSET 50
 #define MESSAGE_FONT_SIZE 20
 #define update_message(message, fmt, ...) snprintf(message, sizeof(message), fmt, __VA_ARGS__)
@@ -319,7 +319,7 @@ int main(int argc, char **argv)
             DrawTexturePro(texture, source, destination, origin,(float)angle, WHITE);
 
             EndScissorMode();
-            DrawTextEx(customFont, message, (Vector2){20, window_height - OFFSET}, message_font_size, 1, WHITE);
+            DrawTextEx(customFont, message, (Vector2){0, window_height-(OFFSET+message_font_size)/2.0f}, message_font_size, 1, WHITE);
 
         }
         else
