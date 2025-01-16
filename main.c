@@ -159,6 +159,10 @@ int main(int argc, char **argv)
     char message[2048] = {0};
     float target_scale = 1.0f;
 
+    #ifdef RELEASE
+        SetTraceLogLevel(LOG_NONE); 
+    #endif
+
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
     InitWindow(window_width, window_height, WINDOW_TITLE);
     SetTargetFPS(60);
@@ -175,13 +179,6 @@ int main(int argc, char **argv)
         texture   = LoadTexture(images[++current_image]);
         image_pos = update_pos(texture, &target_scale);
     }
-
-
-    #ifdef RELEASE
-        SetTraceLogLevel(LOG_NONE); 
-    #endif
-
-
 
     const Vector2 dpi_scale     = GetWindowScaleDPI();
     const int message_font_size = (int)ceilf(MESSAGE_FONT_SIZE * dpi_scale.y);
