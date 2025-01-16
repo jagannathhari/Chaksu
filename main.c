@@ -204,6 +204,7 @@ int main(int argc, char **argv)
             UnloadTexture(texture);
             texture   = LoadTexture(images[++current_image]);
             image_pos = update_pos(texture, &target_scale);
+            angle = 0;
         }
 
         if (IsKeyReleased(KEY_A))
@@ -231,6 +232,7 @@ int main(int argc, char **argv)
             UnloadTexture(texture);
             texture   = LoadTexture(images[--current_image]);
             image_pos = update_pos(texture, &target_scale);
+            angle = 0;
         }
 
         if (IsGestureDetected(GESTURE_DOUBLETAP) || IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) || IsWindowResized())
