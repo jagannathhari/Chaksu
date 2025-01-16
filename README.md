@@ -1,6 +1,7 @@
 # Chaksu - Image Viewer
 
 Chaksu is a minimal, cross-platform image viewer designed to be fast, lightweight, and dependency-free. It comes as a single binary under 1 MB in size (uncompressed) and under 400 KB when UPX compressed. It supports basic image viewing features such as zooming, panning, and rotation.
+download from [release](https://github.com/jagannathhari/Chaksu/releases) page.
 
 ## Features
 
@@ -10,11 +11,6 @@ Chaksu is a minimal, cross-platform image viewer designed to be fast, lightweigh
 - **Zoom, Pan, and Rotate Support**: Seamlessly zoom in/out, pan across, and rotate images.
 - **Minimal**: Simple and clean user interface.
 - **Dependency-Free**: No external dependencies, just the binary.
-
-# Download
-
-Download from [release](https://github.com/jagannathhari/Chaksu/releases) page.
-
 
 # Controls
 
