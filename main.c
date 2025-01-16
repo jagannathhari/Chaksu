@@ -12,7 +12,7 @@
 
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 700
-#define WINDOW_TITLE "Image Viewer"
+#define WINDOW_TITLE "Chaksu Image Viewer"
 #define BACKGROUND_COLOR (Color){18, 18, 18, 255}
 #define OFFSET 50
 #define MESSAGE_FONT_SIZE 20
