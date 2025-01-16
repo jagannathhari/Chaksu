@@ -340,9 +340,8 @@ cleanup:
         free(images[i]);
 
     free_vector(images);
-
-    CloseWindow();
     UnloadTexture(texture);
+    CloseWindow();
 
     return 0;
 }
