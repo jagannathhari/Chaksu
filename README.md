@@ -16,6 +16,24 @@ Chaksu is a minimal, cross-platform image viewer designed to be fast, lightweigh
 Download from [release](https://github.com/jagannathhari/Chaksu/releases) page.
 
 
+# Controls
+
+- **Rotate:**
+  - Press **S** to rotate image clockwise.
+  - Press **A** to rotate image counterclockwise.
+- **Navigation:**
+  - Press **N** to view the next image.
+  - Press **P** to view the previous image.
+- **Drag & Drop:**
+  - Drag and drop an image or a directory containing images to open.
+- **Reset View:**
+  - Press **0** to reset the image view.
+- **Zoom:**
+  - Zoom in or out using the mouse wheel.
+- **Pan:**
+  - Pan the image by clicking and dragging with the mouse.
+
+
 # Build
 
 On Linux:
