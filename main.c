@@ -210,8 +210,8 @@ int main(int argc, char **argv)
         if (IsKeyReleased(KEY_A))
         {
             angle += 90;
-            if (angle == 360.0)
-                angle = 0.0f;
+            if (angle == 360)
+                angle = 0;
         }
 
         if (IsKeyReleased(KEY_S))
@@ -224,7 +224,7 @@ int main(int argc, char **argv)
         if (IsKeyReleased(KEY_ZERO))
         {
             image_pos = update_pos(texture, &target_scale);
-            angle     = 0.0f;
+            angle     = 0;
         }
 
         if (IsKeyReleased(KEY_P) && current_image - 1 >= 0)
@@ -300,7 +300,7 @@ int main(int argc, char **argv)
         Rectangle destination = {image_pos.x + origin.x, image_pos.y + origin.y, texture.width * target_scale,
                                  texture.height * target_scale};
 
-        DrawTexturePro(texture, source, destination, origin, angle, WHITE);
+        DrawTexturePro(texture, source, destination, origin,(float)angle, WHITE);
 
         EndScissorMode();
 
