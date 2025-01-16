@@ -146,38 +146,42 @@ char **parser_argument(const char **files, const int n)
 int main(int argc, char **argv)
 {
     Texture2D texture;
-    char **images;
 
+    char **images      = NULL;
     bool dragging      = false;
     Vector2 offset     = {0, 0};
     float last_click   = 0;
     int total_images   = 0;
     int window_width   = WINDOW_WIDTH;
-    int current_image  = 0;
+    int current_image  = -1;
     int window_height  = WINDOW_HEIGHT;
     Vector2 image_pos  = {0, 0};
     char message[2048] = {0};
     float target_scale = 1.0f;
 
-    if (argc == 1)
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
+    InitWindow(window_width, window_height, WINDOW_TITLE);
+    SetTargetFPS(60);
+
+    if (argc == 1){
         images = get_images_from_dir(GetWorkingDirectory());
+
+    }
     else
         images = parser_argument((const char **)argv + 1, argc - 1);
 
-    if (!images || !(total_images = vector_length(images)))
-        goto cleanup;
+    if (images && (total_images = vector_length(images)) > 0)
+    {
+        texture   = LoadTexture(images[++current_image]);
+        image_pos = update_pos(texture, &target_scale);
+    }
 
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
 
     #ifdef RELEASE
         SetTraceLogLevel(LOG_NONE); 
     #endif
 
-    InitWindow(window_width, window_height, WINDOW_TITLE);
-    SetTargetFPS(60);
 
-    texture   = LoadTexture(images[current_image]);
-    image_pos = update_pos(texture, &target_scale);
 
     const Vector2 dpi_scale     = GetWindowScaleDPI();
     const int message_font_size = (int)ceilf(MESSAGE_FONT_SIZE * dpi_scale.y);
@@ -193,12 +197,19 @@ int main(int argc, char **argv)
             FilePathList droped_files = LoadDroppedFiles();
             char **temp  = parser_argument((const char**)droped_files.paths,droped_files.count); 
             int temp_len = vector_length(temp); 
+
             for(int i = 0 ; i < temp_len; i++)
             {
                 vector_append(images,temp[i]);
             }
 
             total_images = vector_length(images); 
+
+            if(current_image == -1 && total_images > 0)
+            {
+                texture   = LoadTexture(images[++current_image]);
+                image_pos = update_pos(texture, &target_scale);
+            }
 
             free_vector(temp); 
             UnloadDroppedFiles(droped_files); 
@@ -292,30 +303,40 @@ int main(int argc, char **argv)
             image_pos.y = mouse_position.y - mouse_world_pos.y * target_scale;
         }
 
-        update_message(message, "[%d/%d](zoom %.2f%%) %s", current_image + 1, total_images, target_scale * 100,
-                       images[current_image]);
 
         BeginDrawing();
         ClearBackground(BACKGROUND_COLOR);
 
-        BeginScissorMode(0, 0, window_width, window_height - OFFSET);
+        if(total_images > 0)
+        {
+            update_message(message, "[%d/%d](zoom %.2f%%) %s", current_image + 1, total_images, target_scale * 100,
+                       images[current_image]);
 
-        Rectangle source      = {0, 0, texture.width, texture.height};
-        Vector2 origin        = {(texture.width * target_scale) / 2, (texture.height * target_scale) / 2};
-        Rectangle destination = {image_pos.x + origin.x, image_pos.y + origin.y, texture.width * target_scale,
-                                 texture.height * target_scale};
+            BeginScissorMode(0, 0, window_width, window_height - OFFSET);
 
-        DrawTexturePro(texture, source, destination, origin,(float)angle, WHITE);
+            Rectangle source      = {0, 0, texture.width, texture.height};
+            Vector2 origin        = {(texture.width * target_scale) / 2, (texture.height * target_scale) / 2};
+            Rectangle destination = {image_pos.x + origin.x, image_pos.y + origin.y, texture.width * target_scale,
+                                     texture.height * target_scale};
 
-        EndScissorMode();
+            DrawTexturePro(texture, source, destination, origin,(float)angle, WHITE);
 
-        DrawTextEx(customFont, message, (Vector2){20, window_height - OFFSET}, message_font_size, 1, WHITE);
+            EndScissorMode();
+            DrawTextEx(customFont, message, (Vector2){20, window_height - OFFSET}, message_font_size, 1, WHITE);
+
+        }
+        else
+        {
+            update_message(message, "%s","Drag and Drop image(s) file or Folder containing image(s)"); 
+            DrawTextEx(customFont, message, (Vector2){20, window_height - OFFSET}, message_font_size, 1,RED);
+
+        }
 
         EndDrawing();
+        
     }
 
 cleanup:
-
     total_images = vector_length(images);
 
     for (int i = 0; i < total_images; i++)
