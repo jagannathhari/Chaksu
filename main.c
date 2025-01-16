@@ -168,6 +168,11 @@ int main(int argc, char **argv)
         goto cleanup;
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
+
+    #ifdef RELEASE
+        SetTraceLogLevel(LOG_NONE); 
+    #endif
+
     InitWindow(window_width, window_height, WINDOW_TITLE);
     SetTargetFPS(60);
 
