@@ -169,7 +169,9 @@ Texture chaksu_load_texture(const char *file)
                          .height = height,
                          .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
                         };
-            return LoadTextureFromImage(img); 
+            texture = LoadTextureFromImage(img); 
+            UnloadImage(img);
+            return texture; 
 
     }
     return LoadTexture(file);
