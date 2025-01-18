@@ -2,11 +2,14 @@
 #include <math.h>
 #include <stdio.h>
 
+#include <webp/decode.h>
+
 #include "raylib.h"
 
 #define IMPLEMENT_VECTOR
 #include "vector.h"
 #include "resources.c"
+
 
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 700
@@ -17,7 +20,7 @@
 #define update_message(message, fmt, ...) snprintf(message, sizeof(message), fmt, __VA_ARGS__)
 
 const char valid_extesnsions[][5] = {".png", ".jpg", ".jpeg", ".gif", ".psd", ".tga", ".bmp", ".ppm",
-                                     ".pic", ".hdr", ".pvr",  ".qoi", ".dds", ".pkm", ".ktx", ".astc"};
+                                     ".pic", ".hdr", ".pvr",  ".qoi", ".dds", ".pkm", ".ktx", ".astc",".webp"};
 const int total_extesnions = sizeof(valid_extesnsions) / sizeof(valid_extesnsions[0]);
 
 char *str_duplicate(const char *str)
@@ -142,6 +145,37 @@ char **parser_argument(const char **files, const int n)
     return images;
 }
 
+Texture chaksu_load_texture(const char *file)
+{
+    Texture texture = {0};
+    if(!is_image(file)) return texture;
+
+    if(IsFileExtension(file, ".webp"))
+    {
+            int data_size = 0;
+            int width = 0;
+            int height = 0;
+            unsigned char *file_data = LoadFileData(file, &data_size);
+
+            if(data_size == 0) return texture;
+
+            uint8_t  *pixels = WebPDecodeRGBA(file_data, data_size,&width, &height);
+
+            if(!pixels || height == 0 || width == 0) return texture;
+
+            Image img = {.data = pixels,
+                         .mipmaps = 1,
+                         .width = width,
+                         .height = height,
+                         .format = PIXELFORMAT_UNCOMPRESSED_R8G8B8A8,
+                        };
+            return LoadTextureFromImage(img); 
+
+    }
+    return LoadTexture(file);
+}
+
+
 int main(int argc, char **argv)
 {
     Texture2D texture;
@@ -175,7 +209,7 @@ int main(int argc, char **argv)
 
     if (images && (total_images = vector_length(images)) > 0)
     {
-        texture   = LoadTexture(images[++current_image]);
+        texture   = chaksu_load_texture(images[++current_image]);
         image_pos = update_pos(texture, &target_scale);
     }
 
@@ -203,7 +237,7 @@ int main(int argc, char **argv)
 
             if(current_image == -1 && total_images > 0)
             {
-                texture   = LoadTexture(images[++current_image]);
+                texture   = chaksu_load_texture(images[++current_image]);
                 image_pos = update_pos(texture, &target_scale);
             }
 
@@ -214,7 +248,7 @@ int main(int argc, char **argv)
         if (IsKeyReleased(KEY_N) && current_image + 1 < total_images)
         {
             UnloadTexture(texture);
-            texture   = LoadTexture(images[++current_image]);
+            texture   = chaksu_load_texture(images[++current_image]);
             image_pos = update_pos(texture, &target_scale);
             angle = 0;
         }
@@ -242,7 +276,7 @@ int main(int argc, char **argv)
         if (IsKeyReleased(KEY_P) && current_image - 1 >= 0)
         {
             UnloadTexture(texture);
-            texture   = LoadTexture(images[--current_image]);
+            texture   = chaksu_load_texture(images[--current_image]);
             image_pos = update_pos(texture, &target_scale);
             angle = 0;
         }
