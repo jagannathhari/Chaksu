@@ -1,13 +1,11 @@
 #include <string.h>
+#include <math.h>
+#include <stdio.h>
 
 #include "raylib.h"
 
 #define IMPLEMENT_VECTOR
 #include "vector.h"
-
-#include <math.h>
-#include <stdio.h>
-
 #include "resources.c"
 
 #define WINDOW_WIDTH 1000
