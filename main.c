@@ -8,15 +8,16 @@
 
 #define IMPLEMENT_VECTOR
 #include "vector.h"
-#include "resources.c"
+
+#include "./config.h"
+
+#if !defined (CHAKSU_CUSTOM_FONT)
+    #include "resources.c"
+#endif
 
 
-#define WINDOW_WIDTH 1000
-#define WINDOW_HEIGHT 700
 #define WINDOW_TITLE "Chaksu Image Viewer"
-#define BACKGROUND_COLOR (Color){0x28,0x28,0x28, 255}
 #define OFFSET 50
-#define MESSAGE_FONT_SIZE 20
 #define update_message(message, fmt, ...) snprintf(message, sizeof(message), fmt, __VA_ARGS__)
 
 // https://www.reddit.com/r/C_Programming/comments/1i40cus/comment/m7tryqu/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
@@ -194,9 +195,9 @@ int main(int argc, char **argv)
     Vector2 offset     = {0, 0};
     float last_click   = 0;
     int total_images   = 0;
-    int window_width   = WINDOW_WIDTH;
+    int window_width   = CHAKSU_WINDOW_WIDTH;
     int current_image  = -1;
-    int window_height  = WINDOW_HEIGHT;
+    int window_height  = CHAKSU_WINDOW_HEIGHT;
     Vector2 image_pos  = {0, 0};
     char message[2048] = {0};
     float target_scale = 1.0f;
@@ -207,7 +208,7 @@ int main(int argc, char **argv)
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
     InitWindow(window_width, window_height, WINDOW_TITLE);
-    SetTargetFPS(60);
+    SetTargetFPS(CHAKSU_FRAMERATE);
 
     // https://www.reddit.com/r/raylib/comments/1i40fxp/comment/m7thpjr/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
     EnableEventWaiting();
@@ -226,9 +227,13 @@ int main(int argc, char **argv)
     }
 
     const Vector2 dpi_scale     = GetWindowScaleDPI();
-    const int message_font_size = (int)ceilf(MESSAGE_FONT_SIZE * dpi_scale.y);
+    const int message_font_size = (int)ceilf(CHAKSU_MESSAGE_FONT_SIZE * dpi_scale.y);
 
-    Font customFont = LoadFontFromMemory(".ttf", font_data, sizeof(font_data), message_font_size, 0, 0);
+    #if !defined (CHAKSU_CUSTOM_FONT)
+        Font custom_font = LoadFontFromMemory(".ttf", font_data, sizeof(font_data), message_font_size, 0, 0);
+    #else
+        Font custom_font = LoadFont(CHAKSU_CUSTOM_FONT);
+    #endif
 
     int angle = 0;
 
@@ -257,7 +262,7 @@ int main(int argc, char **argv)
             UnloadDroppedFiles(droped_files); 
         }
 
-        if (IsKeyReleased(KEY_N) && current_image + 1 < total_images)
+        if (IsKeyReleased(CHAKSU_NEXT_IMAGE) && current_image + 1 < total_images)
         {
             UnloadTexture(texture);
             texture   = chaksu_load_texture(images[++current_image]);
@@ -284,8 +289,7 @@ int main(int argc, char **argv)
             image_pos = update_pos(texture, &target_scale);
             angle     = 0;
         }
-
-        if (IsKeyReleased(KEY_P) && current_image - 1 >= 0)
+        if (IsKeyReleased(CHAKSU_PREV_IMAGE) && current_image - 1 >= 0)
         {
             UnloadTexture(texture);
             texture   = chaksu_load_texture(images[--current_image]);
@@ -336,10 +340,10 @@ int main(int argc, char **argv)
             Vector2 mouse_world_pos = {(mouse_position.x - image_pos.x) / target_scale,
                                        (mouse_position.y - image_pos.y) / target_scale};
 
-            target_scale += scroll * 0.3f;
+            target_scale += scroll * CHAKSU_SCALE_FACTOR;
 
-            if (target_scale < 0.1f)
-                target_scale = 0.1f;
+            if (target_scale < CHAKSU_MIN_SCALE)
+                target_scale = CHAKSU_MIN_SCALE;
 
             image_pos.x = mouse_position.x - mouse_world_pos.x * target_scale;
             image_pos.y = mouse_position.y - mouse_world_pos.y * target_scale;
@@ -347,7 +351,7 @@ int main(int argc, char **argv)
 
 
         BeginDrawing();
-        ClearBackground(BACKGROUND_COLOR);
+        ClearBackground(CHAKSU_BG_COLOR);
 
         if(total_images > 0)
         {
@@ -364,13 +368,13 @@ int main(int argc, char **argv)
             DrawTexturePro(texture, source, destination, origin,(float)angle, WHITE);
 
             EndScissorMode();
-            DrawTextEx(customFont, message, (Vector2){0, window_height-(OFFSET+message_font_size)/2.0f}, message_font_size, 1, WHITE);
+            DrawTextEx(custom_font, message, (Vector2){0, window_height-(OFFSET+message_font_size)/2.0f}, message_font_size, 1,CHAKSU_MESSAGE_COLOR);
 
         }
         else
         {
             update_message(message, "%s","Drag and Drop image(s) file or Folder containing image(s)"); 
-            DrawTextEx(customFont, message, (Vector2){20, window_height - OFFSET}, message_font_size, 1,RED);
+            DrawTextEx(custom_font, message, (Vector2){20, window_height - OFFSET}, message_font_size, 1,CHAKSU_MESSAGE_ERR_COLOR);
 
         }
 
