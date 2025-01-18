@@ -32,8 +32,13 @@ Download from [release](https://github.com/jagannathhari/Chaksu/releases) page.
 
 # Build
 
+## build depenpencies:-
+[libwebp](https://github.com/webmproject/libwebp/releases/tag/v1.5.0)
+[Raylib](https://github.com/raysan5/raylib/releases/tag/5.5)
+
+compile both library(statically or dynamically) and link against it.
 On Linux:
 
 ```
-cc main.c -o chaksu -lraylib -lGL -lm -lpthread -ldl -lrt -lX11
+cc main.c -o chaksu -I. -DRELEASE -lraylib -lwebp -lGL -lm -lpthread -ldl -lrt -lX11
 ```
