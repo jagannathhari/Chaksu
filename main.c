@@ -270,25 +270,26 @@ int main(int argc, char **argv)
             angle = 0;
         }
 
-        if (IsKeyReleased(KEY_A))
+        if (IsKeyReleased(CHAKSU_ROTATE_CW))
         {
             angle += 90;
             if (angle == 360)
                 angle = 0;
         }
 
-        if (IsKeyReleased(KEY_S))
+        if (IsKeyReleased(CHAKSU_ROTATE_CCW))
         {
             angle -= 90;
             if (angle == -360)
                 angle = 0;
         }
 
-        if (IsKeyReleased(KEY_ZERO))
+        if (IsKeyReleased(CHAKSU_FIT_SCREEN))
         {
             image_pos = update_pos(texture, &target_scale);
             angle     = 0;
         }
+
         if (IsKeyReleased(CHAKSU_PREV_IMAGE) && current_image - 1 >= 0)
         {
             UnloadTexture(texture);
