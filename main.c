@@ -19,9 +19,9 @@
 #define MESSAGE_FONT_SIZE 20
 #define update_message(message, fmt, ...) snprintf(message, sizeof(message), fmt, __VA_ARGS__)
 
-const char valid_extesnsions[][5] = {".png", ".jpg", ".jpeg", ".gif", ".psd", ".tga", ".bmp", ".ppm",
+const char valid_extensions[][5] = {".png", ".jpg", ".jpeg", ".gif", ".psd", ".tga", ".bmp", ".ppm",
                                      ".pic", ".hdr", ".pvr",  ".qoi", ".dds", ".pkm", ".ktx", ".astc",".webp"};
-const int total_extesnions = sizeof(valid_extesnsions) / sizeof(valid_extesnsions[0]);
+const int total_extensions = sizeof(valid_extensions) / sizeof(valid_extensions[0]);
 
 char *str_duplicate(const char *str)
 {
@@ -70,9 +70,9 @@ bool is_image(const char *path)
     if (!IsPathFile(path))
         return false;
 
-    for (int i = 0; i < total_extesnions; i++)
+    for (int i = 0; i < total_extensions; i++)
     {
-        if (IsFileExtension(path, valid_extesnsions[i]))
+        if (IsFileExtension(path, valid_extensions[i]))
             return true;
     }
 
