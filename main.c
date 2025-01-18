@@ -19,8 +19,15 @@
 #define MESSAGE_FONT_SIZE 20
 #define update_message(message, fmt, ...) snprintf(message, sizeof(message), fmt, __VA_ARGS__)
 
-const char valid_extensions[][5] = {".png", ".jpg", ".jpeg", ".gif", ".psd", ".tga", ".bmp", ".ppm",
-                                     ".pic", ".hdr", ".pvr",  ".qoi", ".dds", ".pkm", ".ktx", ".astc",".webp"};
+// https://www.reddit.com/r/C_Programming/comments/1i40cus/comment/m7tryqu/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+
+#define MAX_FILE_EXTENSION_LEN 16
+const char valid_extensions[][MAX_FILE_EXTENSION_LEN] = {
+    ".png", ".jpg", ".jpeg", ".gif", ".psd", ".tga", ".bmp", ".ppm",
+     ".pic", ".hdr", ".pvr",  ".qoi", ".dds", ".pkm", ".ktx", ".astc",".webp"
+};
+
+
 const int total_extensions = sizeof(valid_extensions) / sizeof(valid_extensions[0]);
 
 char *str_duplicate(const char *str)
