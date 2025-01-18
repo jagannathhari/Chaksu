@@ -33,10 +33,11 @@ Download from [release](https://github.com/jagannathhari/Chaksu/releases) page.
 # Build
 
 ## build depenpencies:-
-[libwebp](https://github.com/webmproject/libwebp/releases/tag/v1.5.0)
-[Raylib](https://github.com/raysan5/raylib/releases/tag/5.5)
+[libwebp 1.5.0](https://github.com/webmproject/libwebp/releases/tag/v1.5.0)<br>
+[Raylib 5.5](https://github.com/raysan5/raylib/releases/tag/5.5)<br>
 
-compile both library(statically or dynamically) and link against it.
+compile both library(statically or dynamically) and link against it.<br>
+
 On Linux:
 
 ```
