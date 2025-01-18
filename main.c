@@ -18,7 +18,8 @@
 #define MESSAGE_FONT_SIZE 20
 #define update_message(message, fmt, ...) snprintf(message, sizeof(message), fmt, __VA_ARGS__)
 
-const char valid_extesnsions[][5] = {".png", ".jpg", ".jpeg", ".gif",".psd",".tga",".bmp",".ppm",".pic",".hdr",".pvr",".qoi",".dds",".pkm",".ktx",".astc"};
+const char valid_extesnsions[][5] = {".png", ".jpg", ".jpeg", ".gif", ".psd", ".tga", ".bmp", ".ppm",
+                                     ".pic", ".hdr", ".pvr",  ".qoi", ".dds", ".pkm", ".ktx", ".astc"};
 const int total_extesnions = sizeof(valid_extesnsions) / sizeof(valid_extesnsions[0]);
 
 char *str_duplicate(const char *str)
