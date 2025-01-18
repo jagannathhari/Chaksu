@@ -6,7 +6,7 @@ Download from [release](https://github.com/jagannathhari/Chaksu/releases) page.
 ## Features
 
 - **Single Binary**: No installation required. Just download and run.
-- **Small Size**: < 1 MB (uncompressed), < 400 KB when UPX compressed.
+- **Small Size**: < 2 MB (uncompressed), < 700 KB when UPX compressed.
 - **Cross-Platform**: Works on Windows, macOS(not tested), and Linux.
 - **Zoom, Pan, and Rotate Support**: Seamlessly zoom in/out, pan across, and rotate images.
 - **Minimal**: Simple and clean user interface.
@@ -18,8 +18,8 @@ Download from [release](https://github.com/jagannathhari/Chaksu/releases) page.
   - Press **S** to rotate image clockwise.
   - Press **A** to rotate image counterclockwise.
 - **Navigation:**
-  - Press **N** to view the next image.
-  - Press **P** to view the previous image.
+  - Press **SPACE** to view the next image.
+  - Press **BACKSPACE** to view the previous image.
 - **Drag & Drop:**
   - Drag and drop an image or a directory containing images to open.
 - **Reset View:**
