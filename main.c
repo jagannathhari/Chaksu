@@ -202,6 +202,9 @@ int main(int argc, char **argv)
     InitWindow(window_width, window_height, WINDOW_TITLE);
     SetTargetFPS(60);
 
+    // https://www.reddit.com/r/raylib/comments/1i40fxp/comment/m7thpjr/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+    EnableEventWaiting();
+
     if (argc == 1){
         images = get_images_from_dir(GetWorkingDirectory());
 
