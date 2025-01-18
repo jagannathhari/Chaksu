@@ -43,3 +43,5 @@ On Linux:
 ```
 cc main.c -o chaksu -I. -DRELEASE -lraylib -lwebp -lGL -lm -lpthread -ldl -lrt -lX11
 ```
+## Font Use
+[Anonymous Pro](https://www.marksimonson.com/fonts/view/anonymous-pro/)
