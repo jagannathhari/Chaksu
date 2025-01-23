@@ -12,6 +12,10 @@ Download from [release](https://github.com/jagannathhari/Chaksu/releases) page.
 - **Minimal**: Simple and clean user interface.
 - **Dependency-Free**: No external dependencies, just the binary.
 
+## TODO
+- [] load configration from file(user define config at runtime)
+- [] Search images recursivly.
+
 # Controls
 
 - **Rotate:**
