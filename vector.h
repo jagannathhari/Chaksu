@@ -24,7 +24,7 @@
 
 #ifndef VEC_MALLOC
     #define VEC_MALLOC(size) malloc(size)
-    #define VEC_FREE(ptr) malloc(ptr)
+    #define VEC_FREE(ptr) free(ptr)
     #define VEC_REALLOC(ptr,new_size) realloc(ptr,new_size)
 #endif
 
