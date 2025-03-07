@@ -6,7 +6,7 @@
 typedef enum
 {
     VALUE_INT,
-    VALUE_FlOAT,
+    VALUE_FLOAT,
     VALUE_STRING
 } config__ValueType;
 
@@ -25,7 +25,7 @@ typedef struct
 typedef struct
 {
     int key;
-    config__Value value;
+    config__Value data;
 } config__KeyValue;
 
 typedef struct
@@ -341,7 +341,7 @@ static config__Value config__value(char **memory, config__Parser *parser)
     case TOKEN_VAL_FLOAT: {
         float x = strtof(*memory + parser->current_token.lexeme, NULL);
         value =
-            (config__Value){.value_type = VALUE_FlOAT, .value.double_value = x};
+            (config__Value){.value_type = VALUE_FLOAT, .value.double_value = x};
         config__eat(memory, parser, TOKEN_VAL_FLOAT);
     }
     default:
@@ -351,25 +351,40 @@ static config__Value config__value(char **memory, config__Parser *parser)
     return value;
 }
 
+static bool config__get_value(const char *key, const config__ValueType required_type,
+                             Config *config, config__Value *result)
+{
+    if (!key || !result || !config)
+        return false;
+
+    size_t len = vector_length(config->config__data);
+    const char* memory = config->config__memory;
+
+    for (size_t i = 0; i < len; i++)
+    {
+        const config__ValueType value_type = config->config__data[i].data.value_type;
+        const char *key_tmp = &memory[config->config__data[i].key];
+        if(value_type == required_type && strcmp(key, key_tmp) == 0)
+        {
+            result->value = config->config__data[i].data.value;
+            result->value_type = required_type;
+            return true;
+        }
+    }
+    puts("Unable to find key");
+    return false;
+}
+
 int config_get_int(const char *key, Config *config)
 {
     if (!config)
         return 0;
 
-    size_t len = vector_length(config->config__data);
-    const char *memory = config->config__memory;
-    for (size_t i = 0; i < len; i++)
+    config__Value  data = {0};
+    if(config__get_value(key, VALUE_INT, config, &data))
     {
-        const config__ValueType value_type =
-            config->config__data[i].value.value_type;
-        const char *key_tmp = &memory[config->config__data[i].key];
-        if (value_type == VALUE_INT && strcmp(key, key_tmp) == 0)
-        {
-            return config->config__data[i].value.value.int_value;
-        }
+        return data.value.int_value;
     }
-
-    puts("Unable to find key");
     return 0;
 }
 
@@ -378,41 +393,27 @@ double config_get_decimal(const char *key, Config *config)
     if (!config)
         return 0.0;
 
-    size_t len = vector_length(config->config__data);
-    const char *memory = config->config__memory;
-    for (size_t i = 0; i < len; i++)
+    config__Value  data = {0};
+    if(config__get_value(key, VALUE_FLOAT, config, &data))
     {
-        const config__ValueType value_type =
-            config->config__data[i].value.value_type;
-        const char *key_tmp = &memory[config->config__data[i].key];
-        if (value_type == VALUE_FlOAT && strcmp(key, key_tmp) == 0)
-        {
-            return config->config__data[i].value.value.double_value;
-        }
+        return data.value.double_value;
     }
 
-    puts("Unable to find key");
     return 0.0;
-}
+ }
 
 char* config_get_string(const char *key, Config *config)
 {
     if (!config)
         return NULL;
 
-    size_t len = vector_length(config->config__data);
+    config__Value  data = {0};
     char *memory = config->config__memory;
-    for (size_t i = 0; i < len; i++)
+    if(config__get_value(key, VALUE_STRING, config, &data))
     {
-        const config__ValueType value_type =
-            config->config__data[i].value.value_type;
-        const char *key_tmp = &memory[config->config__data[i].key];
-        if (value_type == VALUE_STRING && strcmp(key, key_tmp) == 0)
-        {
-            return &memory[config->config__data[i].value.value.string_value];
-        }
+        return &memory[data.value.string_value];
     }
-    puts("Unable to find key");
+
     return NULL;
 }
 
@@ -456,7 +457,7 @@ static Config* config__config__helper(const char *buffer, size_t buffer_len)
             config__KeyValue tmp = {.key = parser.current_token.lexeme};
             config__eat(&config->config__memory, &parser, TOKEN_KEY);
             config__eat(&config->config__memory, &parser, TOKEN_ASSIGNMENT);
-            tmp.value = config__value(&config->config__memory, &parser);
+            tmp.data = config__value(&config->config__memory, &parser);
             vector_append(res, tmp);
         }
         break;
