@@ -55,9 +55,6 @@ Config* config_from_file(const char *file);
 #define IMPLEMENT_VECTOR
 #include "./vector.h"
 
-#define IMPLEMENT_UTIL
-#include "./util.h"
-
 typedef struct
 {
     const char *buffer;
