@@ -1,5 +1,5 @@
-#ifndef CONFIG_H
-#define CONFIG_H
+#ifndef CONFIG_PARSER_H
+#define CONFIG_PARSER_H
 
 #include <stddef.h>
 
@@ -42,9 +42,9 @@ Config* config_from_memory(const char *buffer, size_t buffer_len);
 Config* config_from_file(const char *file);
 
 
-#endif //CONFIG_H
+#endif //CONFIG_PARSER_H
 
-#ifdef IMPLEMENT_CONFIG
+#ifdef IMPLEMENT_CONFIG_PARSER
 
 #include <ctype.h>
 #include <stdbool.h>
@@ -488,4 +488,4 @@ Config* config_from_file(const char *file)
     return config;
 }
 
-#endif // IMPLEMENT_CONFIG
+#endif // IMPLEMENT_CONFIG_PARSER
