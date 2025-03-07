@@ -154,7 +154,7 @@ static char* config__read_whole_file(const char *file, long int *bytes)
         return NULL;
 
     char *file_data = NULL;
-    long file_size = 0;
+    size_t file_size = 0;
 
     fseek(f, 0, SEEK_END);
     file_size = ftell(f);
