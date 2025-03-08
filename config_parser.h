@@ -2,6 +2,7 @@
 #define CONFIG_PARSER_H
 
 #include <stddef.h>
+#include <stdbool.h>
 
 typedef enum
 {
@@ -34,10 +35,10 @@ typedef struct
     config__KeyValue *config__data;
 } Config;
 
-void    config_free(Config *config);
-int     config_get_int(const char *key, Config *config);
-double  config_get_decimal(const char *key, Config *config);
-char*   config_get_string(const char *key, Config *config);
+void config_free(Config *config);
+bool config_get_int(const char *key, Config *config, int* res);
+bool config_get_decimal(const char *key, Config *config, double* res);
+bool config_get_string(const char *key, Config *config, char** res);
 Config* config_from_memory(const char *buffer, size_t buffer_len);
 Config* config_from_file(const char *file);
 
@@ -47,7 +48,6 @@ Config* config_from_file(const char *file);
 #ifdef IMPLEMENT_CONFIG_PARSER
 
 #include <ctype.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -356,7 +356,6 @@ static bool config__get_value(const char *key, const config__ValueType required_
 
     size_t len = vector_length(config->config__data);
     const char* memory = config->config__memory;
-
     for (size_t i = 0; i < len; i++)
     {
         const config__ValueType value_type = config->config__data[i].data.value_type;
@@ -368,50 +367,52 @@ static bool config__get_value(const char *key, const config__ValueType required_
             return true;
         }
     }
-    puts("Unable to find key");
     return false;
 }
 
-int config_get_int(const char *key, Config *config)
+bool config_get_int(const char *key, Config *config,int* res)
 {
     if (!config)
-        return 0;
+        return false;
 
     config__Value  data = {0};
     if(config__get_value(key, VALUE_INT, config, &data))
     {
-        return data.value.int_value;
+        *res = data.value.int_value;
+        return true;
     }
-    return 0;
+    return false;
 }
 
-double config_get_decimal(const char *key, Config *config)
+bool config_get_decimal(const char *key, Config *config,double* res)
 {
     if (!config)
-        return 0.0;
+        return false;
 
     config__Value  data = {0};
     if(config__get_value(key, VALUE_FLOAT, config, &data))
     {
-        return data.value.double_value;
+        *res = data.value.double_value;
+        return true;
     }
 
-    return 0.0;
+    return false;
  }
 
-char* config_get_string(const char *key, Config *config)
+bool config_get_string(const char *key, Config *config,char** res)
 {
     if (!config)
-        return NULL;
+        return false;
 
     config__Value  data = {0};
     char *memory = config->config__memory;
     if(config__get_value(key, VALUE_STRING, config, &data))
     {
-        return &memory[data.value.string_value];
+        *res = &memory[data.value.string_value];
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
 static Config* config__config__helper(const char *buffer, size_t buffer_len)
