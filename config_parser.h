@@ -36,9 +36,10 @@ typedef struct
 } Config;
 
 void config_free(Config *config);
-bool config_get_int(Config *config,const char *key, int* res);
-bool config_get_decimal(Config *config,const char *key, double* res);
-bool config_get_string(Config *config,const char *key, char** res);
+bool config_get_int(Config *config,const char *key,int* res);
+bool config_get_double(Config *config,const char *key,float* res);
+bool config_get_float(Config *config,const char *key,float* res);
+bool config_get_string(Config *config,const char *key,char** res);
 Config* config_from_memory(const char *buffer, size_t buffer_len);
 Config* config_from_file(const char *file);
 
@@ -370,7 +371,7 @@ static bool config__get_value(const char *key, const config__ValueType required_
     return false;
 }
 
-bool config_get_int(Config *config,const char *key, int* res)
+bool config_get_int(Config *config,const char *key,int* res)
 {
     if (!config)
         return false;
@@ -384,7 +385,7 @@ bool config_get_int(Config *config,const char *key, int* res)
     return false;
 }
 
-bool config_get_decimal(Config *config,const char *key, double* res)
+bool config_get_double(Config *config,const char *key, double* res)
 {
     if (!config)
         return false;
@@ -398,6 +399,18 @@ bool config_get_decimal(Config *config,const char *key, double* res)
 
     return false;
  }
+
+bool config_get_float(Config *config,const char *key, float* res)
+{
+    double result;
+    if(config_get_double(config,key,&result))
+    {
+        *res = (float)result
+        return true;
+    }
+
+    return false;
+}
 
 bool config_get_string(Config *config,const char *key, char** res)
 {
