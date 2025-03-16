@@ -405,7 +405,7 @@ bool config_get_float(Config *config,const char *key, float* res)
     double result;
     if(config_get_double(config,key,&result))
     {
-        *res = (float)result
+        *res = (float)result;
         return true;
     }
 
