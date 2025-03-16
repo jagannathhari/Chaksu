@@ -37,7 +37,7 @@ typedef struct
 
 void config_free(Config *config);
 bool config_get_int(Config *config,const char *key,int* res);
-bool config_get_double(Config *config,const char *key,float* res);
+bool config_get_double(Config *config,const char *key,double* res);
 bool config_get_float(Config *config,const char *key,float* res);
 bool config_get_string(Config *config,const char *key,char** res);
 Config* config_from_memory(const char *buffer, size_t buffer_len);
