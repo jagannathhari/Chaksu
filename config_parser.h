@@ -273,11 +273,12 @@ static config__Token config__next_token(char **memory, config__ScannerState *ss)
         case '\r':
             ss->start = ss->pos;
             break;
-        case '\n': {
+        case '\n':
+        {
             ss->lines++;
             ss->start = ss->pos;
+            break;
         }
-        break;
         case '=':
             return config__assignement(memory, ss);
         case '"':
@@ -318,7 +319,8 @@ static config__Value config__value(char **memory, config__Parser *parser)
     config__Value value = {0};
     switch (parser->current_token.type)
     {
-    case TOKEN_VAL_STRING: {
+    case TOKEN_VAL_STRING: 
+    {
         value =
             (config__Value){.value_type = VALUE_STRING,
                             .value.string_value = parser->current_token.lexeme};
@@ -326,24 +328,29 @@ static config__Value config__value(char **memory, config__Parser *parser)
         config__eat(memory, parser, TOKEN_VAL_STRING);
         return value;
     }
-    break;
 
-    case TOKEN_VAL_INT: {
+    case TOKEN_VAL_INT:
+    {
         int parsed = strtol(*memory + parser->current_token.lexeme, NULL, 10);
         value =
             (config__Value){.value_type = VALUE_INT, .value.int_value = parsed};
         config__eat(memory, parser, TOKEN_VAL_INT);
+        return value;
     }
-    break;
 
-    case TOKEN_VAL_FLOAT: {
+    case TOKEN_VAL_FLOAT:
+    {
         float x = strtof(*memory + parser->current_token.lexeme, NULL);
         value =
             (config__Value){.value_type = VALUE_FLOAT, .value.double_value = x};
         config__eat(memory, parser, TOKEN_VAL_FLOAT);
+        return value;
     }
     default:
-        break;
+    {
+        // handle error gracefully;
+    }
+
     }
 
     return value;
