@@ -33,7 +33,7 @@ const char valid_extensions[][MAX_FILE_EXTENSION_LEN] =
 };
 
 
-const int total_extensions = sizeof(valid_extensions) / sizeof(valid_extensions[0]);
+const int total_extensions = sizeof(valid_extensions)/sizeof(valid_extensions[0]);
 
 typedef struct 
 {
@@ -130,7 +130,9 @@ KeyboardKey str_to_keyboard_key(const char* key)
     return KEY_NULL;
 }
 
-bool config_get_keyboard_key(Config *config,const char *key,KeyboardKey* keyboard_key)
+bool config_get_keyboard_key(Config *config,
+                             const char *key,
+                             KeyboardKey* keyboard_key)
 {
     char* key_pressed = NULL;
     if(!config_get_string(config,key,&key_pressed)) return false;
@@ -184,14 +186,16 @@ Vector2 update_pos(Texture2D texture, float *scale)
     const int screen_width   = GetScreenWidth();
     const int screen_height  = GetScreenHeight() - OFFSET;
 
-    if(texture.width <= screen_width && texture.height <= screen_height)
+    if(texture.width <= screen_width&&
+        texture.height <= screen_height)
     {
         *scale = 1;
-        return (Vector2){(screen_width - texture.width) / 2.0, (screen_height - texture.height) / 2.0};
+        return (Vector2){(screen_width - texture.width) / 2.0,
+                         (screen_height-texture.height) / 2.0};
 
     }
 
-    const float aspect_ratio = (float)texture.width / texture.height;
+    const float aspect_ratio = (float)texture.width/texture.height;
 
     int new_width  = screen_width;
     int new_height = new_width / aspect_ratio;
@@ -204,7 +208,8 @@ Vector2 update_pos(Texture2D texture, float *scale)
 
     *scale = (float)new_width / texture.width;
 
-    return (Vector2){(screen_width - new_width) / 2.0, (screen_height - new_height) / 2.0};
+    return (Vector2){(screen_width - new_width) / 2.0,
+                     (screen_height - new_height) / 2.0};
 }
 
 bool is_image(const char *path)
@@ -408,25 +413,40 @@ void chaksu_load_config(const char* cofig_file, chaksu_config* cfg)
 
     if(!config) return; 
 
-    with_default(int,"window_width",cfg->window_width,CHAKSU_WINDOW_WIDTH);
-    with_default(int,"window_height",cfg->window_height,CHAKSU_WINDOW_HEIGHT);
-    with_default(int,"frame_rate",cfg->chaksu_framerate,CHAKSU_FRAMERATE);
-    with_default(int,"font_size",cfg->chaksu_message_font_size,CHAKSU_MESSAGE_FONT_SIZE);
+    with_default(int,"window_width",cfg->window_width,
+                 CHAKSU_WINDOW_WIDTH);
+    with_default(int,"window_height",cfg->window_height,
+                 CHAKSU_WINDOW_HEIGHT);
+    with_default(int,"frame_rate",cfg->chaksu_framerate,
+                 CHAKSU_FRAMERATE);
+    with_default(int,"font_size",cfg->chaksu_message_font_size,
+                 CHAKSU_MESSAGE_FONT_SIZE);
 
-    with_default(string,"font_path",cfg->font_path,NULL);
+    with_default(string,"font_path",cfg->font_path,
+                 NULL);
 
-    with_default(float,"scale_factor",cfg->chaksu_scale_factor,CHAKSU_SCALE_FACTOR);
-    with_default(float,"min_scale",cfg->chaksu_min_scale,CHAKSU_MIN_SCALE);
+    with_default(float,"scale_factor",cfg->chaksu_scale_factor,
+                 CHAKSU_SCALE_FACTOR);
+    with_default(float,"min_scale",cfg->chaksu_min_scale,
+                 CHAKSU_MIN_SCALE);
 
-    with_default(color,"background_color",cfg->chaksu_bg_color,CHAKSU_BG_COLOR);
-    with_default(color,"message_color",cfg->chaksu_message_color,CHAKSU_MESSAGE_COLOR);
-    with_default(color,"message_error_color", cfg->chaksu_message_err_color ,CHAKSU_MESSAGE_ERR_COLOR);
+    with_default(color,"background_color",cfg->chaksu_bg_color,
+                 CHAKSU_BG_COLOR);
+    with_default(color,"message_color",cfg->chaksu_message_color,
+                 CHAKSU_MESSAGE_COLOR);
+    with_default(color,"message_error_color", cfg->chaksu_message_err_color,
+                 CHAKSU_MESSAGE_ERR_COLOR);
 
-    with_default(keyboard_key,"key_next_image", cfg->chaksu_next_image, CHAKSU_NEXT_IMAGE);
-    with_default(keyboard_key,"key_prev_image", cfg->chaksu_next_image, CHAKSU_PREV_IMAGE);
-    with_default(keyboard_key,"key_rotate_ccw", cfg->chaksu_rotate_ccw, CHAKSU_ROTATE_CCW);
-    with_default(keyboard_key,"key_rotate_cw", cfg->chaksu_rotate_cw, CHAKSU_ROTATE_CW);
-    with_default(keyboard_key,"key_zoom_reset", cfg->chaksu_fit_screen, CHAKSU_FIT_SCREEN);
+    with_default(keyboard_key,"key_next_image", cfg->chaksu_next_image,
+                 CHAKSU_NEXT_IMAGE);
+    with_default(keyboard_key,"key_prev_image", cfg->chaksu_next_image,
+                 CHAKSU_PREV_IMAGE);
+    with_default(keyboard_key,"key_rotate_ccw", cfg->chaksu_rotate_ccw,
+                 CHAKSU_ROTATE_CCW);
+    with_default(keyboard_key,"key_rotate_cw", cfg->chaksu_rotate_cw,
+                 CHAKSU_ROTATE_CW);
+    with_default(keyboard_key,"key_zoom_reset", cfg->chaksu_fit_screen,
+                 CHAKSU_FIT_SCREEN);
 }
 
 int main(int argc, char **argv)
@@ -491,7 +511,11 @@ int main(int argc, char **argv)
 
     Font custom_font = {0};
     if(!default_config.font_path)
-        custom_font = LoadFontFromMemory(".ttf", font_data, sizeof(font_data), message_font_size, 0, 0);
+        custom_font = LoadFontFromMemory(".ttf",font_data,
+                                         sizeof(font_data),
+                                         message_font_size,
+                                         0,
+                                         0);
     else
         custom_font = LoadFontEx(default_config.font_path,message_font_size, 0,0);
 
@@ -502,7 +526,8 @@ int main(int argc, char **argv)
         if (IsFileDropped())
         {
             FilePathList droped_files = LoadDroppedFiles();
-            char **temp  = get_all_valid_images((const char**)droped_files.paths,droped_files.count,false); 
+            char **temp  = get_all_valid_images((const char**)droped_files.paths,
+                                                droped_files.count,false); 
             int temp_len = vector_length(temp); 
 
             for(int i = 0 ; i < temp_len; i++)
@@ -522,7 +547,8 @@ int main(int argc, char **argv)
             UnloadDroppedFiles(droped_files); 
         }
 
-        if (IsKeyReleased(default_config.chaksu_next_image) && current_image + 1 < total_images)
+        if (IsKeyReleased(default_config.chaksu_next_image)&&
+            current_image + 1 < total_images)
         {
             UnloadTexture(texture);
             texture   = chaksu_load_texture(images[++current_image]);
@@ -550,7 +576,8 @@ int main(int argc, char **argv)
             angle     = 0;
         }
 
-        if (IsKeyReleased(default_config.chaksu_prev_image) && current_image - 1 >= 0)
+        if (IsKeyReleased(default_config.chaksu_prev_image)
+            && current_image - 1 >= 0)
         {
             UnloadTexture(texture);
             texture   = chaksu_load_texture(images[--current_image]);
@@ -579,7 +606,9 @@ int main(int argc, char **argv)
 
             Vector2 mouse_position = GetMousePosition();
 
-            offset = (Vector2){mouse_position.x - image_pos.x, mouse_position.y - image_pos.y};
+            offset = (Vector2){mouse_position.x - image_pos.x,
+                                mouse_position.y - image_pos.y
+                              };
             dragging = true;
         }
 
@@ -619,27 +648,47 @@ int main(int argc, char **argv)
 
         if(total_images > 0)
         {
-            update_message(message, "[%d/%d](zoom %.2f%%) %s", current_image + 1, total_images, target_scale * 100,
-                       images[current_image]);
+            update_message(message, "[%d/%d](zoom %.2f%%) %s",
+                           current_image + 1,
+                           total_images,
+                           target_scale * 100,
+                           images[current_image]
+                           );
 
             BeginScissorMode(0, 0, window_width, window_height - OFFSET);
 
             Rectangle source      = {0, 0, texture.width, texture.height};
-            Vector2 origin        = {(texture.width * target_scale) / 2, (texture.height * target_scale) / 2};
-            Rectangle destination = {image_pos.x + origin.x, image_pos.y + origin.y, texture.width * target_scale,
-                                     texture.height * target_scale};
+            Vector2 origin        = {(texture.width * target_scale) / 2,
+                                     (texture.height * target_scale) / 2
+                                    };
+            Rectangle destination = {
+                image_pos.x + origin.x,
+                image_pos.y + origin.y,
+                texture.width * target_scale,
+                texture.height * target_scale
+            };
 
             DrawTexturePro(texture, source, destination, origin,(float)angle, WHITE);
 
             EndScissorMode();
-            DrawTextEx(custom_font, message, (Vector2){0, window_height - (OFFSET + message_font_size) / 2.0f},
-                       message_font_size, 1, default_config.chaksu_message_color);
+            DrawTextEx(custom_font, message,
+                       (Vector2){0, window_height - (OFFSET + message_font_size) / 2.0f},
+                       message_font_size, 
+                       1, 
+                       default_config.chaksu_message_color
+                       );
         }
         else
         {
-            update_message(message, "%s","Drag and Drop image(s) file or Folder containing image(s)");
-            DrawTextEx(custom_font, message, (Vector2){20, window_height - OFFSET}, message_font_size, 1,
-                       default_config.chaksu_message_err_color);
+            update_message(message, "%s",
+                           "Drag and Drop image(s) file or Folder containing image(s)");
+            DrawTextEx(custom_font,
+                       message,
+                       (Vector2){20, window_height - OFFSET},
+                       message_font_size,
+                       1,
+                       default_config.chaksu_message_err_color
+                    );
         }
 
         EndDrawing();
