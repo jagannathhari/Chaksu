@@ -15,7 +15,6 @@
 #define CHAKSU_FRAMERATE 60
 #define CHAKSU_SCALE_FACTOR 0.3f
 #define CHAKSU_MIN_SCALE 0.1f
-
-// #define CHAKSU_CUSTOM_FONT "abolute or relative path of ttf font" // ttf font file path
+#define CHAKSU_CUSTOM_FONT NULL
 
 #endif // config_h_INCLUDED
