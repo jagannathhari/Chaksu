@@ -13,7 +13,7 @@ Download from [release](https://github.com/jagannathhari/Chaksu/releases) page.
 - **Dependency-Free**: No external dependencies, just the binary.
 
 ## TODO
-- [ ] load configration from file(user define config at runtime)
+- [x] load configration from file(user define config at runtime)
 - [ ] Search images recursivly.
 
 # Controls
