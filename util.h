@@ -4,6 +4,7 @@
 
 int hex_digit_to_int(char c);
 char *str_duplicate(const char *str);
+char *str_to_upper(char *str); 
 // char *substr(const char *source, int start, int end);
 
 #endif // util_h_INCLUDED
@@ -31,6 +32,20 @@ char *str_duplicate(const char *str)
 
     return dulicated_str;
 }
+
+char *str_to_upper(char *str)
+{
+    char* temp = str;
+    while(*temp)
+    {
+        if(*temp>='a' && *temp<='z')
+        {
+            *temp = *temp - 32;
+        }
+        temp++;
+    }
+   return str; 
+} 
 /*
 char *substr(const char *source, int start, int end)
 {

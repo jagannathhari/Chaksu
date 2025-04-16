@@ -136,8 +136,8 @@ bool config_get_keyboard_key(Config *config,
 {
     char* key_pressed = NULL;
     if(!config_get_string(config,key,&key_pressed)) return false;
-
-    KeyboardKey res = str_to_keyboard_key(key_pressed);
+    
+    KeyboardKey res = str_to_keyboard_key(str_to_upper(key_pressed));
 
     if(res == KEY_NULL) return false; 
 
