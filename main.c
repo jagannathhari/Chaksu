@@ -398,7 +398,7 @@ chaksu_config default_config = {
 //     return NULL;
 // }
 
-void chaksu_load_config(const char* cofig_file, chaksu_config* cfg)
+Config* chaksu_load_config(const char* cofig_file, chaksu_config* cfg)
 {
     #define with_default(type,key,var,default_val)                                                         \
     do{                                                                                                    \
@@ -411,7 +411,7 @@ void chaksu_load_config(const char* cofig_file, chaksu_config* cfg)
 
     Config* config = config_from_file(cofig_file);
 
-    if(!config) return; 
+    if(!config) return NULL; 
 
     with_default(int,"window_width",cfg->window_width,
                  CHAKSU_WINDOW_WIDTH);
@@ -447,16 +447,18 @@ void chaksu_load_config(const char* cofig_file, chaksu_config* cfg)
                  CHAKSU_ROTATE_CW);
     with_default(keyboard_key,"key_zoom_reset", cfg->chaksu_fit_screen,
                  CHAKSU_FIT_SCREEN);
+    return config;
 }
 
 int main(int argc, char **argv)
 {
     chaksu_arguments passed_args = parse_argument((const char**)argv,argc); 
+    Config* config;
 
     if(passed_args.config_file && IsPathFile(passed_args.config_file))
     {
         puts(passed_args.config_file);
-        chaksu_load_config(passed_args.config_file,&default_config); 
+        config = chaksu_load_config(passed_args.config_file,&default_config); 
     }
     else
     {
@@ -703,7 +705,7 @@ int main(int argc, char **argv)
 
     free_vector(images);
     free_vector(passed_args.other_arguments);
-
+    config_free(config);
     UnloadTexture(texture);
     CloseWindow();
 
